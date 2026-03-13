@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block css %}
+<style>
+body{
+    background-image:url('https://img.freepik.com/free-photo/futuristic-interior-design-with-bright-light-geometric-shapes_23-2151986975.jpg?semt=ais_rp_50_assets&w=740&q=80');
+    object-fit:cover;
+    background-repeat:no-repeat;
+    background-size:cover;
+}
+    .container {
+        display: flex;
+        justify-content:center;
+        padding-top: 10px;
+
+    }
+    .form {
+        padding: 20px;
+        border: 2px black solid;
+        width: 100%;
+        max-width: 400px;
+        background-color:#F0F3F5;
+        border-radius:5px;
+    }
+
+    .input-group {
+        position: relative;
+        margin-bottom: 15px;
+    }
+    .input-group input {
+        width: 100%;
+        height: 40px;
+        padding-right: 40px; /* Space for the eye */
+        box-sizing: border-box;
+    }
+    .toggle-icon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        z-index: 10;
+    }
+    #passwordMessage {
+        font-size: 0.9em;
+        margin-top: -10px;
+        margin-bottom: 10px;
+        display: block;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <div class="form">
+        <h2>Enter Your Information</h2>
+        <a href="/doc_login/">Already have accounts as doctor?:Login</a>
+        <form id="signupForm" action="/doc_signup/" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <input type="text" name="name" class="form-control rounded" placeholder="Enter Full Name" required>
+            <br>
+            <input type="text" name="phone" class="form-control rounded" placeholder="Enter Phone No." required>
+            <br>
+            <input type="email" name="email" class="form-control rounded" placeholder="Enter Email" required>
+            <br>
+            <input type="file" name="prof_photo" class="form-control rounded" placeholder="Enter Photo" required>
+            <br>
+            <input type="text" name="exp" class="form-control rounded" placeholder="Enter no. of experience" required>
+            <br>
+            <input type="text" name="qualification" class="form-control rounded" placeholder="Enter qualification Ex:Surgeon(MBBS)" required>
+
+
+            <label>Password</label>
+            <div class="input-group">
+                <input type="password" name="password" id="password" required>
+                <span id="togglePassword" class="toggle-icon">👁️</span>
+            </div>
+
+            <label>Confirm Password</label>
+            <div class="input-group">
+                <input type="password" name="confirmpassword" id="confirmpassword" required>
+                <span id="toggleConfirmPassword" class="toggle-icon">👁️</span>
+            </div>
+
+            <span id="passwordMessage"></span>
+
+            <button id="registerBtn" class="btn btn-primary" type="submit" style="width: 100%; margin-top: 10px;">Save Information</button>
+        </form>
+    </div>
+</div>
+
+
+
+<script>
+
+    function setupToggle(inputId, toggleId) {
+        const input = document.getElementById(inputId);
+        const toggle = document.getElementById(toggleId);
+
+        toggle.addEventListener('click', function() {
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            toggle.textContent = isPassword ? '🙈' : '👁️';
+        });
+    }
+
+    setupToggle('password', 'togglePassword');
+    setupToggle('confirmpassword', 'toggleConfirmPassword');
+
+
+    const pass1 = document.getElementById('password');
+    const pass2 = document.getElementById('confirmpassword');
+    const message = document.getElementById('passwordMessage');
+    const btn = document.getElementById('registerBtn');
+    const form = document.getElementById('signupForm');
+
+    function checkMatch() {
+        if (pass2.value === "") {
+            message.textContent = "";
+            btn.disabled = false;
+            return;
+        }
+
+        if (pass1.value === pass2.value) {
+            message.textContent = "✓ Passwords match";
+            message.style.color = "green";
+            btn.disabled = false;
+        } else {
+            message.textContent = "× Passwords do not match";
+            message.style.color = "red";
+            // We don't necessarily disable the button (better UX),
+            // but we stop the form from submitting below.
+        }
+    }
+
+    pass1.addEventListener('input', checkMatch);
+    pass2.addEventListener('input', checkMatch);
+
+
+    form.addEventListener('submit', function(e) {
+        if (pass1.value !== pass2.value) {
+            e.preventDefault(); // This stops the form from submitting!
+            alert("Passwords do not match. Please fix them before saving.");
+        }
+    });
+</script>
+
+{% endblock %}

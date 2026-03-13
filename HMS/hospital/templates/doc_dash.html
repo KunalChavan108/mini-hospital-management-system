@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div class="container mt-5">
+
+<h2>Welcome Dr. {{request.session.doctor_name}}</h2>
+
+<h3 class="mt-4">Patient Appointments</h3>
+
+<table class="table table-bordered">
+
+<tr>
+<th>Patient Name</th>
+<th>Date</th>
+<th>Slot</th>
+</tr>
+
+{% for a in apps %}
+
+<tr>
+<td>{{a.patient.name}}</td>
+<td>{{a.date}}</td>
+<td>{{a.slot}}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}

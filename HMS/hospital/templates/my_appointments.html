@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div class="container mt-5">
+
+<h2>My Appointments</h2>
+
+<table class="table table-bordered">
+
+<tr>
+<th>Doctor</th>
+<th>Date</th>
+<th>Slot</th>
+</tr>
+
+{% for a in apps %}
+
+<tr>
+<td>Dr. {{a.doctor.name}}</td>
+<td>{{a.date}}</td>
+<td>{{a.slot}}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+{% endblock %}

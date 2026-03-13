@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div class="container mt-5">
+
+<h3>Book Appointment with Dr. {{doc.name}}</h3>
+
+<form method="POST">
+{% csrf_token %}
+
+<label>Select Date</label>
+<input type="date" name="date" class="form-control" required>
+
+<br>
+
+<label>Select Slot</label>
+
+<select name="slot" class="form-control">
+
+{% for s in slots %}
+<option value="{{s}}">{{s}}</option>
+{% endfor %}
+
+</select>
+
+<br>
+
+<button class="btn btn-success">Book Appointment</button>
+
+</form>
+
+<br>
+
+<h4 style="color:red">{{msg}}</h4>
+
+</div>
+
+{% endblock %}

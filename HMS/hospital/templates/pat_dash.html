@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block css %}
+<style>
+
+body{
+    background:#f4f6f9;
+}
+
+.sidebar{
+    height:100vh;
+    background:#343a40;
+    padding-top:20px;
+}
+
+.sidebar a{
+    color:white;
+    display:block;
+    padding:12px 20px;
+    text-decoration:none;
+}
+
+.sidebar a:hover{
+    background:#495057;
+}
+
+.dashboard-content{
+    padding:25px;
+}
+
+.card{
+    border:none;
+    border-radius:10px;
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 6px 15px rgba(0,0,0,0.15);
+}
+
+.welcome-box{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    margin-bottom:25px;
+}
+
+</style>
+{% endblock %}
+
+{% block body %}
+
+<div class="container-fluid">
+
+<div class="row">
+
+<!-- Sidebar -->
+<div class="col-md-2 sidebar">
+
+<h4 class="text-center text-white">Patient Panel</h4>
+<hr class="bg-light">
+
+<a href="/pat_dash/">Dashboard</a>
+<a href="/view_doctors/">View Doctors</a>
+<a href="/view_doctors/">Book Appointment</a>
+<a href="/my_appointments/">My Appointments</a>
+<a href="#">My Profile</a>
+<a href="/logout/">Logout</a>
+
+</div>
+
+
+<!-- Main Dashboard -->
+<div class="col-md-10 dashboard-content">
+
+<div class="welcome-box">
+
+<h3>Welcome {{request.session.name}}</h3>
+<p>Manage your appointments and view doctors from your dashboard.</p>
+
+</div>
+
+
+<div class="row">
+
+<div class="col-md-4 mb-4">
+<div class="card text-center p-3">
+<h4>Doctors Available</h4>
+<p>View all doctors in the hospital.</p>
+<a href="/view_doctors/" class="btn btn-primary">View Doctors</a>
+</div>
+</div>
+
+
+<div class="col-md-4 mb-4">
+<div class="card text-center p-3">
+<h4>Book Appointment</h4>
+<p>Select doctor and book a time slot.</p>
+<a href="/view_doctors/" class="btn btn-success">Book Now</a>
+</div>
+</div>
+
+
+<div class="col-md-4 mb-4">
+<div class="card text-center p-3">
+<h4>My Appointments</h4>
+<p>Check your booked appointments.</p>
+<a href="/my_appointments/" class="btn btn-info">View</a>
+</div>
+</div>
+
+</div>
+
+
+<div class="row">
+
+<div class="col-md-4 mb-4">
+<div class="card text-center p-3">
+<h4>My Profile</h4>
+<p>Update personal information.</p>
+<a href="#" class="btn btn-warning">Open</a>
+</div>
+</div>
+
+
+<div class="col-md-4 mb-4">
+<div class="card text-center p-3">
+<h4>Medical Records</h4>
+<p>Access previous consultations.</p>
+<a href="#" class="btn btn-secondary">View</a>
+</div>
+</div>
+
+
+<div class="col-md-4 mb-4">
+<div class="card text-center p-3">
+<h4>Logout</h4>
+<p>Sign out from your dashboard.</p>
+<a href="/logout/" class="btn btn-danger">Logout</a>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

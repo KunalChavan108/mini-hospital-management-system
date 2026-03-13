@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block css %}
+
+<style>
+
+body{
+    background:#f4f6f9;
+}
+
+.doctor-card{
+    border:none;
+    border-radius:10px;
+    transition:0.3s;
+}
+
+.doctor-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 6px 18px rgba(0,0,0,0.15);
+}
+
+.doctor-img{
+    height:200px;
+    object-fit:cover;
+}
+
+</style>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="container mt-4">
+
+<h2 class="mb-4">Available Doctors</h2>
+
+<div class="row">
+
+{% for d in docs %}
+
+<div class="col-md-4 mb-4">
+
+<div class="card doctor-card">
+
+<img src="{{d.prof_photo.url}}" class="card-img-top doctor-img">
+
+<div class="card-body text-center">
+
+<h4>{{d.name}}</h4>
+
+<p>
+<strong>Qualification:</strong> {{d.qualification}} <br>
+<strong>Experience:</strong> {{d.exp}} Years
+</p>
+
+<a href="/book/{{d.id}}/" class="btn btn-primary">
+Book Appointment
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</div>
+
+{% endblock %}
