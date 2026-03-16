@@ -1,5 +1,5 @@
 from django.db import models
-
+from google_calendar import create_event
 # Create your models here.
 
 class doctor(models.Model):

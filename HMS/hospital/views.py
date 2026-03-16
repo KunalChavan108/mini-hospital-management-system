@@ -1,6 +1,9 @@
 from django.shortcuts import render,redirect
 from .models import doctor,patient,appointment
 from django.core.mail import send_mail
+from google_calendar import create_event
+from datetime import datetime, timedelta
+import pytz
 # Create your views here.
 
 def index(request):
@@ -97,21 +100,34 @@ def book_appointment(request, doc_id):
                 "msg":"Slot already booked"
             })
 
-        appointment.objects.create(
+        appt = appointment.objects.create(
             doctor=doc,
             patient=pat,
             date=date,
             slot=slot
         )
 
-        #EMAIL HERE
-        send_mail(
-            "Appointment Confirmation",
-            f"Hello {pat.name}, your appointment with Dr. {doc.name} on {date} at {slot} is confirmed.",
-            "yourgmail@gmail.com",
-            [pat.email],
-            fail_silently=False
+        ist = pytz.timezone("Asia/Kolkata")
+        start_time = datetime.strptime(f"{date} {slot}", "%Y-%m-%d %I:%M %p")
+        start_time = ist.localize(start_time)
+
+        end_time = start_time + timedelta(minutes=30)
+
+        create_event(
+            summary="Doctor Appointment",
+            description=f"Patient: {pat.name}, Doctor: Dr. {doc.name}",
+            start_time=start_time.isoformat(),
+            end_time=end_time.isoformat()
         )
+
+        #EMAIL HERE
+        #send_mail(
+         #   "Appointment Confirmation",
+          #  f"Hello {pat.name}, your appointment with Dr. {doc.name} on {date} at {slot} is confirmed.",
+           # "yourgmail@gmail.com",
+            #[pat.email],
+            #fail_silently=False
+        #)
 
         return render(request,"book.html",{
             "doc":doc,
