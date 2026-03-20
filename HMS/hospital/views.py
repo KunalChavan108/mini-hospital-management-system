@@ -5,7 +5,11 @@ from django.core.mail import send_mail
 from google_calendar import create_event
 from datetime import datetime, timedelta
 import pytz
+import resend
+import os
 # Create your views here.
+
+resend.api_key = os.getenv("RESEND_API_KEY")
 
 def index(request):
     return render(request,'index.html')
@@ -108,6 +112,8 @@ def book_appointment(request, doc_id):
             slot=slot
         )
 
+        send_appointment_email(pat, doc, date, slot)
+
         ist = pytz.timezone("Asia/Kolkata")
         start_time = datetime.strptime(f"{date} {slot}", "%Y-%m-%d %I:%M %p")
         start_time = ist.localize(start_time)
@@ -121,14 +127,7 @@ def book_appointment(request, doc_id):
             end_time=end_time.isoformat()
         )
 
-        #EMAIL HERE
-        send_mail(
-            "Appointment Confirmation",
-            f"Hello {pat.name}, your appointment with Dr. {doc.name} on {date} at {slot} is confirmed.",
-            "yourgmail@gmail.com",
-            [pat.email],
-            fail_silently=False
-        )
+
 
         return render(request,"book.html",{
             "doc":doc,
@@ -137,6 +136,27 @@ def book_appointment(request, doc_id):
         })
 
     return render(request,"book.html",{"doc":doc,"slots":slots})
+
+resend.api_key = os.getenv("RESEND_API_KEY")
+
+def send_appointment_email(pat, doc, date, slot):
+    try:
+        response = resend.Emails.send({
+            "from": "onboarding@resend.dev",
+            "to": pat.email,
+            "subject": "Appointment Confirmation",
+            "html": f"""
+                <h3>Hello {pat.name},</h3>
+                <p>Your appointment is confirmed.</p>
+
+                <b>Doctor:</b> Dr. {doc.name}<br>
+                <b>Date:</b> {date}<br>
+                <b>Time:</b> {slot}
+            """
+        })
+        print("Email sent:", response)   # 👈 ADD THIS
+    except Exception as e:
+        print("Email error:", e)
 
 def my_appointments(request):
     pat_id = request.session.get('patient_id')
