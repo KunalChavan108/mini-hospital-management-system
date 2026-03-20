@@ -1,4 +1,5 @@
 from django.shortcuts import render,redirect
+from django.conf import settings
 from .models import doctor,patient,appointment
 from django.core.mail import send_mail
 from google_calendar import create_event
@@ -121,13 +122,13 @@ def book_appointment(request, doc_id):
         )
 
         #EMAIL HERE
-        #send_mail(
-         #   "Appointment Confirmation",
-          #  f"Hello {pat.name}, your appointment with Dr. {doc.name} on {date} at {slot} is confirmed.",
-           # "yourgmail@gmail.com",
-            #[pat.email],
-            #fail_silently=False
-        #)
+        send_mail(
+            "Appointment Confirmation",
+            f"Hello {pat.name}, your appointment with Dr. {doc.name} on {date} at {slot} is confirmed.",
+            "yourgmail@gmail.com",
+            [pat.email],
+            fail_silently=False
+        )
 
         return render(request,"book.html",{
             "doc":doc,
